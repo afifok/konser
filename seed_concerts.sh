@@ -1,42 +1,79 @@
 #!/bin/bash
 
-# Script pengisian data konser untuk KonserKUY
-echo "=== KonserKUY Pengisian Data Konser ==="
-echo "Script ini akan mengisi database Anda dengan data konser."
+# Define Colors for Beautiful UI
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+YELLOW='\033[1;33m'
+RED='\033[0;31m'
+CYAN='\033[0;36m'
+NC='\033[0m' # No Color
+
+# Clear screen for fresh start
+clear
+
+# Display Beautiful Banner
+echo -e "${BLUE}==============================================================${NC}"
+echo -e "${GREEN}   __  __                                                     ${NC}"
+echo -e "${GREEN}  |  |/  |.-----.-----.-----.-----.----.                      ${NC}"
+echo -e "${GREEN}  |     < |  _  |     |__ --|  -__|   _|                      ${NC}"
+echo -e "${GREEN}  |__|\__||_____|__|__|_____|_____|__|                        ${NC}"
+echo -e "${GREEN}                                                              ${NC}"
+echo -e "       ${CYAN}🎫 ONLINE CONCERT TICKETING DATABASE SEEDER 🎫${NC}"
+echo -e "${BLUE}==============================================================${NC}"
+echo -e "   ${YELLOW}Status:${NC} Ready to initialize sample concert & ticket data."
+echo -e "${BLUE}==============================================================${NC}"
 echo ""
 
-# Periksa apakah proyek adalah proyek Laravel
+# Check for artisan file in current directory
 if [ ! -f "artisan" ]; then
-    echo "Error: file artisan tidak ditemukan. Pastikan Anda menjalankan ini dari root proyek Laravel Anda."
+    echo -e "${RED}[ERROR] File 'artisan' not found!${NC}"
+    echo -e "Please run this script from the root directory of your Laravel project."
+    echo ""
     exit 1
 fi
 
-# Bersihkan cache terlebih dahulu
-echo "Membersihkan cache..."
+# Step 1: Clean cache
+echo -e "${CYAN}[1/5]${NC} Cleaning application caches..."
+echo -e "${BLUE}--------------------------------------------------------------${NC}"
 php artisan cache:clear
-
-# Buat direktori yang diperlukan dan gambar
+php artisan config:clear
+echo -e "${GREEN}[SUCCESS] Cache cleared successfully.${NC}"
 echo ""
-echo "Membuat direktori gambar..."
+
+# Step 2: Seed Image Directories
+echo -e "${CYAN}[2/5]${NC} Initializing asset and image directories..."
+echo -e "${BLUE}--------------------------------------------------------------${NC}"
 php artisan db:seed --class=ImageDirectoriesSeeder
-
-# Seed kategori
+echo -e "${GREEN}[SUCCESS] Image directories set up.${NC}"
 echo ""
-echo "Mengisi data kategori..."
+
+# Step 3: Seed Categories
+echo -e "${CYAN}[3/5]${NC} Seeding concert categories..."
+echo -e "${BLUE}--------------------------------------------------------------${NC}"
 php artisan db:seed --class=CategorySeeder
-
-# Seed konser
+echo -e "${GREEN}[SUCCESS] Categories seeded successfully.${NC}"
 echo ""
-echo "Mengisi data konser..."
+
+# Step 4: Seed Events
+echo -e "${CYAN}[4/5]${NC} Seeding concert events..."
+echo -e "${BLUE}--------------------------------------------------------------${NC}"
 php artisan db:seed --class=EventSeeder
-
-# Seed tiket
+echo -e "${GREEN}[SUCCESS] Concert events seeded successfully.${NC}"
 echo ""
-echo "Mengisi data tiket..."
+
+# Step 5: Seed Tickets
+echo -e "${CYAN}[5/5]${NC} Seeding ticket classes & pricing..."
+echo -e "${BLUE}--------------------------------------------------------------${NC}"
 php artisan db:seed --class=TicketSeeder
-
+echo -e "${GREEN}[SUCCESS] Tickets seeded successfully.${NC}"
 echo ""
-echo "=== Pengisian data konser selesai! ==="
-echo "Anda sekarang dapat menjelajahi konser di website Anda."
-echo "Untuk melihat data konser, jalankan: php artisan konser:view"
-echo "" 
+
+# Completed Banner
+echo -e "${BLUE}==============================================================${NC}"
+echo -e "${GREEN}🎉 DATABASE INITIALIZATION COMPLETED SUCCESSFULLY! 🎉${NC}"
+echo -e "${BLUE}==============================================================${NC}"
+echo -e "  You can now browse and order tickets on your website."
+echo -e "  To preview concert details via command line, run:"
+echo -e "  ${YELLOW}php artisan konser:view${NC}"
+echo -e "${BLUE}==============================================================${NC}"
+echo ""

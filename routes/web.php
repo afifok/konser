@@ -48,6 +48,8 @@ Route::prefix('cart')->name('cart.')->group(function () {
     Route::post('/update', [CartController::class, 'update'])->name('update');
     Route::post('/remove', [CartController::class, 'remove'])->name('remove');
     Route::get('/clear', [CartController::class, 'clear'])->name('clear');
+    Route::post('/promo', [CartController::class, 'applyPromo'])->name('promo.apply');
+    Route::post('/promo/remove', [CartController::class, 'removePromo'])->name('promo.remove');
 });
 
 // Payment Routes (need authentication)

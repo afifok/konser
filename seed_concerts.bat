@@ -1,41 +1,66 @@
 @echo off
-REM Script pengisian data konser untuk KonserKUY
-echo === KonserKUY Pengisian Data Konser ===
-echo Script ini akan mengisi database Anda dengan data konser.
+title [KonserKuy] Database Seeder
+cls
+
+echo ============================================================
+echo    __  __                                                   
+echo   ^|  ^|/  ^|.-----.-----.-----.-----.----.                    
+echo   ^|     ^< ^|  _  ^|     ^|__ --^|  -__^|   _^|                    
+echo   ^|__^|\__^|^|_____^|__^|__^|_____^|_____^|__^|                    
+echo                                                             
+echo        🎫 ONLINE CONCERT TICKETING DATABASE SEEDER 🎫       
+echo ============================================================
+echo    Status: Ready to initialize sample database data.
+echo ============================================================
 echo.
 
-REM Periksa apakah proyek adalah proyek Laravel
+REM Check if artisan file exists
 if not exist "artisan" (
-    echo Error: file artisan tidak ditemukan. Pastikan Anda menjalankan ini dari root proyek Laravel Anda.
+    echo [ERROR] File 'artisan' not found!
+    echo Please run this batch script from the root directory of your Laravel project.
+    echo.
+    pause
     exit /b 1
 )
 
-REM Bersihkan cache terlebih dahulu
-echo Membersihkan cache...
-php artisan cache:clear
-
-REM Buat direktori yang diperlukan dan gambar
+echo [1/5] Cleaning application caches...
+echo ------------------------------------------------------------
+cmd /c "php artisan cache:clear"
+cmd /c "php artisan config:clear"
+echo [SUCCESS] Cache cleared successfully.
 echo.
-echo Membuat direktori gambar...
-php artisan db:seed --class=ImageDirectoriesSeeder
 
-REM Seed kategori
+echo [2/5] Initializing asset and image directories...
+echo ------------------------------------------------------------
+cmd /c "php artisan db:seed --class=ImageDirectoriesSeeder"
+echo [SUCCESS] Image directories set up.
 echo.
-echo Mengisi data kategori...
-php artisan db:seed --class=CategorySeeder
 
-REM Seed konser
+echo [3/5] Seeding concert categories...
+echo ------------------------------------------------------------
+cmd /c "php artisan db:seed --class=CategorySeeder"
+echo [SUCCESS] Categories seeded successfully.
 echo.
-echo Mengisi data konser...
-php artisan db:seed --class=EventSeeder
 
-REM Seed tiket
+echo [4/5] Seeding concert events...
+echo ------------------------------------------------------------
+cmd /c "php artisan db:seed --class=EventSeeder"
+echo [SUCCESS] Concert events seeded successfully.
 echo.
-echo Mengisi data tiket...
-php artisan db:seed --class=TicketSeeder
 
+echo [5/5] Seeding ticket classes and pricing...
+echo ------------------------------------------------------------
+cmd /c "php artisan db:seed --class=TicketSeeder"
+echo [SUCCESS] Tickets seeded successfully.
 echo.
-echo === Pengisian data konser selesai! ===
-echo Anda sekarang dapat menjelajahi konser di website Anda.
-echo Untuk melihat data konser, jalankan: php artisan konser:view
-echo. 
+
+echo ============================================================
+echo 🎉 DATABASE INITIALIZATION COMPLETED SUCCESSFULLY! 🎉
+echo ============================================================
+echo   You can now browse and buy tickets on your website.
+echo   To preview concert details via command line, run:
+echo   php artisan konser:view
+echo ============================================================
+echo.
+
+pause

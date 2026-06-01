@@ -291,10 +291,11 @@ class CartController extends Controller
                     ->with('error', 'Tidak ada tiket valid dalam keranjang. Silakan pilih tiket lagi.');
             }
             
-            // Hitung total
+            // Hitung total dengan diskon promo jika ada
             $tax = $subtotal * 0.11; // 11% tax
             $serviceFee = 50000; // Fixed service fee
-            $total = $subtotal + $tax + $serviceFee;
+            $discount = session()->get('promo_discount', 0);
+            $total = max(0, $subtotal + $tax + $serviceFee - $discount);
             
             // Return view dengan data
             return view('frontend.pages.checkout', compact(
@@ -302,6 +303,7 @@ class CartController extends Controller
                 'subtotal', 
                 'tax', 
                 'serviceFee', 
+                'discount',
                 'total', 
                 'primaryEvent', 
                 'events'
@@ -435,10 +437,11 @@ class CartController extends Controller
             return redirect()->route('cart.index')->with('error', 'Tidak ada tiket valid dalam keranjang Anda.');
         }
         
-        // Calculate total
+        // Calculate total with discount
         $tax = $subtotal * 0.11; // 11% tax
         $serviceFee = 50000; // Fixed service fee
-        $total = $subtotal + $tax + $serviceFee;
+        $discount = session()->get('promo_discount', 0);
+        $total = max(0, $subtotal + $tax + $serviceFee - $discount);
         
         // Get primary event
         $primaryEventId = !empty($eventIds) ? $eventIds[0] : null;
@@ -616,8 +619,10 @@ class CartController extends Controller
             'first_item_has_event' => !empty($orderData) && isset($orderData[0]['event']) ? 'yes' : 'no'
         ]);
         
-        // Clear the cart
+        // Clear the cart & promo code
         session()->forget('cart');
+        session()->forget('promo_code');
+        session()->forget('promo_discount');
         
         // Log successful order
         Log::info('Order processed successfully', [
@@ -869,5 +874,51 @@ class CartController extends Controller
             ]);
             return back()->withErrors(['message' => 'Terjadi kesalahan saat menuju halaman checkout: ' . $e->getMessage()]);
         }
+    }
+
+    /**
+     * Apply promo code to the checkout session
+     */
+    public function applyPromo(Request $request)
+    {
+        $request->validate([
+            'promo_code' => 'required|string',
+        ]);
+
+        $code = strtoupper($request->promo_code);
+        $promo = \App\Models\PromoCode::where('code', $code)->first();
+
+        if (!$promo || !$promo->isValid()) {
+            return redirect()->back()->with('error', 'Kode promo tidak valid atau sudah kadaluwarsa.');
+        }
+
+        // Get cart subtotal
+        $cart = session()->get('cart', []);
+        $subtotal = 0;
+        foreach ($cart as $item) {
+            $subtotal += ($item['price'] ?? 0) * ($item['quantity'] ?? 0);
+        }
+
+        if ($subtotal <= 0) {
+            return redirect()->back()->with('error', 'Keranjang kosong.');
+        }
+
+        $discount = $promo->calculateDiscount($subtotal);
+
+        // Store promo details in session
+        session()->put('promo_code', $promo->code);
+        session()->put('promo_discount', $discount);
+
+        return redirect()->back()->with('success', 'Kode promo berhasil digunakan! Diskon: Rp ' . number_format($discount, 0, ',', '.'));
+    }
+
+    /**
+     * Remove promo code from checkout session
+     */
+    public function removePromo()
+    {
+        session()->forget('promo_code');
+        session()->forget('promo_discount');
+        return redirect()->back()->with('success', 'Kode promo berhasil dihapus.');
     }
 } 
