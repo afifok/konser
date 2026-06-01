@@ -1,110 +1,57 @@
-# Sistem Pemesanan Tiket Konser Online
+# 🎫 Online Concert Ticket Booking System
 
-Selamat datang di **Sistem Pemesanan Tiket Konser Online** berbasis Laravel! Proyek ini dirancang untuk memudahkan pembelian tiket konser secara digital, baik untuk pengguna umum, event organizer (EO), maupun admin sistem.
+[![Laravel Version](https://img.shields.io/badge/Laravel-v10.x-red.svg?style=flat-for-the-badge&logo=laravel)](https://laravel.com)
+[![PHP Version](https://img.shields.io/badge/PHP-v8.1+-blue.svg?style=flat-for-the-badge&logo=php)](https://www.php.net)
+[![License](https://img.shields.io/badge/License-MIT-green.svg?style=flat-for-the-badge)](LICENSE)
 
----
-
-## 🚀 Deskripsi Singkat
-Aplikasi ini memungkinkan pengguna untuk:
-- Menjelajah dan membeli tiket konser secara online
-- Mengelola event dan penjualan tiket (untuk EO)
-- Melakukan monitoring dan manajemen sistem (untuk Admin)
-
-Dengan fitur lengkap, tampilan modern, dan keamanan terjamin.
+A modern, responsive, and robust **Online Concert Ticket Booking System** built with **Laravel**. This application provides a seamless experience for customers to browse events and buy tickets, allows Event Organizers (EO) to manage listings, and equips administrators with a comprehensive dashboard to verify payments and monitor ticket distribution.
 
 ---
 
-## 🎯 Fitur Utama Berdasarkan Role
+## ✨ Key Features
 
-### 👤 **User (Pembeli Tiket)**
-- Registrasi & Login
-- Verifikasi email & reset password
-- Edit profil & ubah password
-- Jelajah & cari event konser
-- Lihat detail event & kategori
-- Tambah tiket ke keranjang
-- Checkout & pembayaran (termasuk payment gateway)
-- Upload bukti pembayaran (jika manual)
-- Mendapatkan e-ticket digital
-- Riwayat transaksi & status pembayaran
-- Notifikasi email terkait pesanan
+### 👤 Customer App
+* **Event Discovery:** Browse active concert listings with dynamic filter, search, and category sorting.
+* **Interactive Ticket Selection:** Choose ticket classes (e.g., VIP, Festival, Regular) with real-time seat/quota updates.
+* **Seamless Checkout:** Simple checkout form requiring basic visitor details.
+* **Payment Integration:** Multi-payment support with a dedicated confirmation upload page for manual bank transfers.
+* **E-Ticket Delivery:** Automatic PDF e-ticket generation and receipt delivery upon payment approval.
 
-### 🎤 **Event Organizer (EO)**
-- Registrasi & login EO
-- Dashboard EO (statistik penjualan, notifikasi)
-- Manajemen event (buat, edit, hapus event)
-- Manajemen tiket (jenis, harga, stok)
-- Laporan penjualan & komisi
-- Export data penjualan ke Excel
-- Notifikasi status event & penjualan
+### 🏢 Event Organizer (EO) Dashboard
+* **Event Management:** Create, edit, and publish concert events with details, pricing, and ticket quotas.
+* **Quota Tracking:** Real-time visual tracking of ticket availability and sales metrics.
+* **Customer List:** View and export list of ticket buyers for specific events.
 
-### 🛡️ **Admin**
-- Login admin
-- Dashboard admin (statistik global, notifikasi)
-- Manajemen user & EO (aktif/nonaktif, hapus)
-- Manajemen event & kategori (validasi, edit, hapus)
-- Laporan transaksi & komisi seluruh sistem
-- Export laporan ke Excel
-- Monitoring aktivitas sistem
-- Pengaturan aplikasi (jika ada)
+### 👑 Administrator Panel
+* **Payment Verifications:** Approve or reject manual payment confirmations uploaded by users.
+* **Order Tracking:** Track order lifecycle states (Waiting Payment, Paid, Cancelled, Expired).
+* **System Settings:** Manage payment methods, website configurations, and user privileges.
 
 ---
 
-## 🛠️ Teknologi yang Digunakan
-- **Laravel** (Backend & Routing)
-- **Blade** (Template Engine)
-- **Tailwind CSS** (Styling)
-- **Maatwebsite/Laravel-Excel** (Export Excel)
-- **SQLite/MySQL** (Database)
-- **Jetstream & Fortify** (Autentikasi)
-- **Livewire** (Jika diaktifkan)
+## 🛠️ Tech Stack & Architecture
+
+* **Framework:** [Laravel 10.x](https://laravel.com) (PHP MVC Framework)
+* **Frontend:** [Blade Templates](https://laravel.com/docs/10.x/blade), [Tailwind CSS](https://tailwindcss.com), [Vite](https://vitejs.dev)
+* **Database:** [MySQL 8.x](https://www.mysql.com/) / [MariaDB](https://mariadb.org/)
+* **Utilities:** Laravel Mail (Receipt & Ticket Dispatch), DomPDF (PDF E-Ticket generation)
 
 ---
 
-## ⚡ Cara Instalasi & Menjalankan
+## 🚀 Installation & Setup Guide
 
-1. **Clone repository**
+Follow these steps to run this project locally on your machine.
+
+### Prerequisites
+Make sure you have installed:
+* **PHP >= 8.1** (with required extensions: BCMath, Ctype, Fileinfo, JSON, Mbstring, OpenSSL, PDO, Tokenizer, XML)
+* **Composer** (PHP Package Manager)
+* **Node.js & NPM**
+* **MySQL** or **MariaDB**
+
+### Step-by-Step Installation
+
+1. **Clone the Repository**
    ```bash
-   git clone <url-repo-anda>
-   cd PENGEMBANGAN-SISTEM-PEMESANAN-TIKET-KONSER-ONLINE-MENGGUNAKAN-LARAVEL
-   ```
-2. **Install dependency**
-   ```bash
-   composer install
-   npm install && npm run dev
-   ```
-3. **Copy file environment**
-   ```bash
-   cp .env.example .env
-   ```
-4. **Generate key**
-   ```bash
-   php artisan key:generate
-   ```
-5. **Migrasi & seeder database**
-   ```bash
-   php artisan migrate --seed
-   ```
-6. **Jalankan server lokal**
-   ```bash
-   php artisan serve
-   ```
-7. **Akses aplikasi**
-   Buka browser ke [http://127.0.0.1:8000](http://127.0.0.1:8000)
-
----
-
-## 📸 Tampilan Antarmuka
-- Dashboard User, EO, dan Admin yang modern & responsif
-- Navigasi mudah, filter event, dan riwayat transaksi
-- Export laporan ke Excel hanya dengan satu klik
-
----
-
-## 🤝 Kontribusi & Kontak
-- Pull request & issue sangat diterima!
-- Untuk pertanyaan, silakan hubungi: [email@domain.com]
-
----
-
-Selamat menggunakan dan semoga sukses dengan event Anda! 🎉
+   git clone https://github.com/afifok/konser.git
+   cd konser
